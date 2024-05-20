@@ -1,0 +1,4 @@
+package ru.cataccess.objects;
+
+public enum Breed {
+}
