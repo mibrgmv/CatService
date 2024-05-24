@@ -1,8 +1,7 @@
 package ru.cataccess.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.cataccess.objects.Breed;
 import ru.cataccess.objects.Color;
 
@@ -10,6 +9,8 @@ import ru.cataccess.objects.Color;
 @Table(name = "cats")
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Cat {
 
     @Id
@@ -17,24 +18,21 @@ public class Cat {
     @Column(name = "id")
     private Long id;
 
+    @NonNull
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NonNull
     @Column(name = "breed", nullable = false)
     @Enumerated(EnumType.STRING)
     private Breed breed;
 
+    @NonNull
     @Column(name = "color", nullable = false)
     @Enumerated(EnumType.STRING)
     private Color color;
 
-//    @ManyToOne
+//    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "owner_id", nullable = false)
 //    private Owner owner;
-
-    public Cat(String name, Breed breed, Color color) {
-        this.name = name;
-        this.breed = breed;
-        this.color = color;
-    }
 }

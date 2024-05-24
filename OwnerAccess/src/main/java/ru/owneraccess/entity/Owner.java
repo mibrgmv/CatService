@@ -1,10 +1,7 @@
 package ru.owneraccess.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -13,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Owner {
 
     @Id
@@ -28,6 +26,7 @@ public class Owner {
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-//    @OneToMany(mappedBy = "owner")
+//    @NonNull
+//    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
 //    private Set<Cat> cats;
 }

@@ -3,6 +3,9 @@ package ru.cataccess.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.cataccess.dto.CatDTO;
+import ru.cataccess.dto.CatToDtoMapper;
+import ru.cataccess.dto.DtoToCatMapper;
 import ru.cataccess.entities.Cat;
 import ru.cataccess.exceptions.CatNotFoundException;
 import ru.cataccess.service.CatService;
@@ -15,20 +18,26 @@ public class CatController {
     @Autowired
     private CatService catService;
 
+    @Autowired
+    private CatToDtoMapper catToDtoMapper;
+
+    @Autowired
+    DtoToCatMapper dtoToCatMapper;
+
     @GetMapping()
-    public List<Cat> getAllCats() {
-        return catService.getAll();
+    public List<CatDTO> getAllCats() {
+        return catService.getAll().stream().map(catToDtoMapper::convert).toList();
     }
 
     @GetMapping("/{catId}")
-    public Cat getCatById(@PathVariable Long catId) {
-        return catService.findById(catId).orElseThrow(() -> new CatNotFoundException(catId));
+    public CatDTO getCatById(@PathVariable Long catId) {
+        return catToDtoMapper.convert(catService.findById(catId).orElseThrow(() -> new CatNotFoundException(catId)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cat createCat(@RequestBody Cat cat) {
-        return catService.save(cat);
+    public Cat createCat(@RequestBody CatDTO catDTO) {
+        return catService.save(dtoToCatMapper.convert(catDTO));
     }
 
     @DeleteMapping("/{catId}")

@@ -1,4 +1,4 @@
-package ru.cataccess.itmo.CatService;
+package ru.catservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
