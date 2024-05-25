@@ -1,27 +1,28 @@
 package ru.cataccess;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import ru.cataccess.entities.Cat;
 import ru.cataccess.objects.Breed;
 import ru.cataccess.objects.Color;
-import ru.cataccess.service.CatService;
-
+import ru.cataccess.service.BaseCatService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CatAccessApplicationTests {
 
-    private CatService catService;
+    @Mock
+    private BaseCatService mockService;
 
     @BeforeEach
-    void setUp() {
-        catService = Mockito.mock(CatService.class);
+    void init() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -32,46 +33,46 @@ class CatAccessApplicationTests {
         mockCats.add(cat_1);
         mockCats.add(cat_2);
 
-        when(catService.getAll()).thenReturn(mockCats);
+        when(mockService.getAll()).thenReturn(mockCats);
 
-        List<Cat> actualCats = catService.getAll();
+        List<Cat> actualCats = mockService.getAll();
 
-        Assertions.assertNotNull(actualCats);
-        Assertions.assertEquals(2, actualCats.size());
-        Assertions.assertTrue(actualCats.contains(cat_1));
-        Assertions.assertTrue(actualCats.contains(cat_2));
+        assertNotNull(actualCats);
+        assertEquals(2, actualCats.size());
+        assertTrue(actualCats.contains(cat_1));
+        assertTrue(actualCats.contains(cat_2));
     }
 
     @Test
     public void testFindById_ExistingId() {
         var mockedCat = new Cat("Snezhok", Breed.Siamese, Color.White);
 
-        when(catService.findById(1L)).thenReturn(Optional.of(mockedCat));
+        when(mockService.findById(1L)).thenReturn(Optional.of(mockedCat));
 
-        Optional<Cat> catOptional = catService.findById(1L);
+        Optional<Cat> catOptional = mockService.findById(1L);
 
-        Assertions.assertTrue(catOptional.isPresent());
+        assertTrue(catOptional.isPresent());
         Cat catActual = catOptional.get();
-        Assertions.assertEquals(mockedCat, catActual);
+        assertEquals(mockedCat, catActual);
     }
 
     @Test
     public void testFindById_NonexistentId() {
         var mockedCat = new Cat("Snezhok", Breed.Siamese, Color.White);
 
-        when(catService.findById(1L)).thenReturn(Optional.of(mockedCat));
+        when(mockService.findById(1L)).thenReturn(Optional.of(mockedCat));
 
-        Optional<Cat> catOptional = catService.findById(2L);
+        Optional<Cat> catOptional = mockService.findById(2L);
 
-        Assertions.assertTrue(catOptional.isEmpty());
+        assertTrue(catOptional.isEmpty());
     }
 
     @Test
     public void testDeleteById() {
-        doNothing().when(catService).deleteById(1L);
+        doNothing().when(mockService).deleteById(1L);
 
-        catService.deleteById(1L);
+        mockService.deleteById(1L);
 
-        verify(catService, times(1)).deleteById(1L);
+        verify(mockService, times(1)).deleteById(1L);
     }
 }
